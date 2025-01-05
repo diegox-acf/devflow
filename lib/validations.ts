@@ -60,3 +60,20 @@ export const SignUpSchema = z
       });
     }
   });
+
+export const AskQuestionSchema = z.object({
+  title: z
+    .string()
+    .min(6, { message: "Title is required." })
+    .max(100, { message: "Title cannot exceed 100 characters." }),
+  content: z.string().min(1, { message: "Body is required." }),
+  tags: z
+    .array(
+      z
+        .string()
+        .min(1, "Tag is required.")
+        .max(15, "Tag cannot exceed 15 characters.")
+    )
+    .min(1, { message: "Please add at least one tag." })
+    .max(5, { message: "You can add up to 5 tags." }),
+});

@@ -23,6 +23,10 @@ const popularTags = [
 ];
 
 const RightSidebar = () => {
+  type Greeting = "Hello" | "Hi" | "Welcome";
+
+  let greeting: Greeting = "Welcome";
+
   return (
     <section
       className="custom-scrollbar background-light900_dark200 border-l light-border h-screen pt-36 p-6 shadow-light-300

@@ -1,22 +1,91 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
-import { signOut } from "next-auth/react";
+import Link from "next/link";
+import React from "react";
+import LocalSearch from "@/components/search/LocalSearch";
+import HomeFilter from "@/components/filters/HomeFilter";
+import QuestionCard from "@/components/cards/QuestionCard";
 
-const Home = () => {
+const questions: Question[] = [
+  {
+    _id: "1",
+    title: "How to learn React?",
+    description: "I want to learn React, can someone help me?",
+    tags: [
+      { _id: "1", name: "React" },
+      { _id: "2", name: "JavaScript" },
+    ],
+    author: {
+      _id: "1",
+      name: "John Doe",
+      image:
+        "data:image/jpeg;base64,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",
+    },
+    upvotes: 10,
+    downvotes: 2,
+    answers: 5,
+    views: 100,
+    createdAt: new Date("2021-09-01"),
+  },
+  {
+    _id: "2",
+    title: "How to learn Javascript?",
+    description: "I want to learn React, can someone help me?",
+    tags: [
+      { _id: "1", name: "React" },
+      { _id: "2", name: "JavaScript" },
+    ],
+    author: {
+      _id: "1",
+      name: "Jane Doe",
+      image:
+        "data:image/jpeg;base64,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",
+    },
+    upvotes: 10,
+    downvotes: 2,
+    answers: 5,
+    views: 100,
+    createdAt: new Date("2024-09-01"),
+  },
+];
+
+interface Searchparams {
+  searchParams: Promise<{ [key: string]: string }>;
+}
+
+const Home = async ({ searchParams }: Searchparams) => {
+  const { query = "" } = await searchParams;
+
+  // cons { data } = axios.get(`/api/questions?${query}`)
+
+  const filterdQuestions = questions.filter((question) =>
+    question.title.toLowerCase().includes(query.toLowerCase())
+  );
+
   return (
     <>
-      <div className="font-sans min-h-screen flex items-center justify-center">
+      <section className="flex flex-col-reverse w-full justify-between gap-4 sm:flex-row sm:items-center">
+        <h1 className="h1-bold text-dark100_light900">All Questions</h1>
         <Button
-          onClick={() => {
-            signOut({
-              redirectTo: ROUTES.SIGN_IN,
-            });
-          }}
+          className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900"
+          asChild
         >
-          Log out
+          <Link href={ROUTES.ASK_QUESTION}>Ask a Question</Link>
         </Button>
+      </section>
+      <section className="mt-11">
+        <LocalSearch
+          route="/"
+          imgSrc="/icons/search.svg"
+          placeholder="Search questions"
+          otherClasses="flex-1"
+        />
+      </section>
+      <HomeFilter />
+      <div className="mt-10 flex w-full flex-col gap-6">
+        {filterdQuestions.map((question) => (
+          <QuestionCard key={question._id} question={question} />
+        ))}
       </div>
     </>
   );

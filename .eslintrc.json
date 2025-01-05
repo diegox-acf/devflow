@@ -1,6 +1,12 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript", "standard"],
   "plugins": ["import"],
+  // "extends": [
+  //   "next/core-web-vitals",
+  //   "next/typescript",
+  //   "standard",
+  //   "plugin:tailwindcss/recommended",
+  //   "prettier"
+  // ],
   "rules": {
     "import/order": [
       "error",
@@ -28,14 +34,5 @@
         }
       }
     ]
-  },
-  "ignorePatterns": ["components/ui/**"],
-  "overrides": [
-    {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {
-        "no-undef": "off"
-      }
-    }
-  ]
+  }
 }
