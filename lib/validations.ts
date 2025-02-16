@@ -77,3 +77,23 @@ export const AskQuestionSchema = z.object({
     .min(1, { message: "Please add at least one tag." })
     .max(5, { message: "You can add up to 5 tags." }),
 });
+
+export const UserSchema = z.object({
+  name: z
+    .string()
+    .min(1, "Name is required.")
+    .max(50, "Name cannot exceed 50 characters."),
+  username: z
+    .string()
+    .min(3, "Username is required.")
+    .max(30, "Username cannot exceed 30 characters."),
+  email: z
+    .string()
+    .min(1, "Email is required.")
+    .email("Please provide a valid email address."),
+  bio: z.string().optional(),
+  image: z.string().url({ message: "Please provide a valid URL." }).optional(),
+  location: z.string().optional(),
+  protfolio: z.string().url().optional(),
+  reputation: z.number().optional(),
+});
