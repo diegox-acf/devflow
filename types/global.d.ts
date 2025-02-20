@@ -34,8 +34,8 @@ interface ActionResponse<T = null> {
   status?: number;
 }
 
-type SuccessResponse<T = null> = ActionResponse<T> & { susccess: true };
-type ErrorResponse<T = null> = ActionResponse<undefined> & { susccess: false };
+type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
+type ErrorResponse<T = null> = ActionResponse<undefined> & { success: false };
 
 type APIErrorResponse = NextResponse<ErrorResponse>;
 type APIResponse<T = null> = NextResponse<SuccessResponse<T> | ErrorResponse>;

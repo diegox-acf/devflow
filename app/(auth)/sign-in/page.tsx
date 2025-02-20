@@ -1,6 +1,7 @@
 "use client";
 
 import AuthForm from "@/components/forms/AuthForm";
+import { signInWithCredentials } from "@/lib/actions/auth.action";
 import { SignInSchema, SignUpSchema } from "@/lib/validations";
 import React from "react";
 
@@ -14,12 +15,7 @@ const SignIn = () => {
           email: "",
           password: "",
         }}
-        onSubmit={(data) =>
-          Promise.resolve({
-            success: true,
-            data,
-          })
-        }
+        onSubmit={signInWithCredentials}
       />
     </div>
   );

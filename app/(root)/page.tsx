@@ -5,6 +5,8 @@ import React from "react";
 import LocalSearch from "@/components/search/LocalSearch";
 import HomeFilter from "@/components/filters/HomeFilter";
 import QuestionCard from "@/components/cards/QuestionCard";
+import { Question } from "@/types/global";
+import { auth } from "@/auth";
 
 const questions: Question[] = [
   {
@@ -54,18 +56,24 @@ interface Searchparams {
 }
 
 const Home = async ({ searchParams }: Searchparams) => {
-  const { query = "" } = await searchParams;
+  const session = await auth();
 
-  // cons { data } = axios.get(`/api/questions?${query}`)
+  const { query = "", filter = "" } = await searchParams;
 
-  const filterdQuestions = questions.filter((question) =>
-    question.title.toLowerCase().includes(query.toLowerCase())
-  );
-
+  const filteredQuestions = questions.filter((question) => {
+    const matchesQuery = question.title
+      .toLowerCase()
+      .includes(query.toLowerCase());
+    const matchesFilter = filter
+      ? question.tags[0].name.toLowerCase() === filter.toLowerCase()
+      : true;
+    return matchesQuery && matchesFilter;
+  });
   return (
     <>
-      <section className="flex flex-col-reverse w-full justify-between gap-4 sm:flex-row sm:items-center">
+      <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
         <h1 className="h1-bold text-dark100_light900">All Questions</h1>
+
         <Button
           className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900"
           asChild
@@ -77,13 +85,13 @@ const Home = async ({ searchParams }: Searchparams) => {
         <LocalSearch
           route="/"
           imgSrc="/icons/search.svg"
-          placeholder="Search questions"
+          placeholder="Search questions..."
           otherClasses="flex-1"
         />
       </section>
       <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
-        {filterdQuestions.map((question) => (
+        {filteredQuestions.map((question) => (
           <QuestionCard key={question._id} question={question} />
         ))}
       </div>
