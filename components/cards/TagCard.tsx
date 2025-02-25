@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import ROUTES from "@/constants/routes";
+import routes from "@/constants/routes";
 import { getDevIconClassName } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -57,7 +57,7 @@ const TagCard = ({
       <div className="flex justify-between gap-2">{Content}</div>
     ) : (
       <Link
-        href={ROUTES.TAGS(id)}
+        href={routes.TAGS(id)}
         className="flex justify-between gap-2 items-center"
       >
         {Content}

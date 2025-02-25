@@ -6,6 +6,7 @@ export interface ITag {
 }
 
 export interface ITagDoc extends ITag, Document {}
+
 const TagSchema = new Schema<ITag>(
   {
     name: { type: String, required: true, unique: true },

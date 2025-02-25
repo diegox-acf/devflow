@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import ROUTES from "@/constants/routes";
+import routes from "@/constants/routes";
 import Link from "next/link";
 import React from "react";
 import LocalSearch from "@/components/search/LocalSearch";
@@ -78,7 +78,7 @@ const Home = async ({ searchParams }: Searchparams) => {
           className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900"
           asChild
         >
-          <Link href={ROUTES.ASK_QUESTION}>Ask a Question</Link>
+          <Link href={routes.ASK_QUESTION}>Ask a Question</Link>
         </Button>
       </section>
       <section className="mt-11">

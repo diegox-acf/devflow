@@ -1,4 +1,4 @@
-import ROUTES from "@/constants/routes";
+import routes from "@/constants/routes";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -38,7 +38,7 @@ const RightSidebar = () => {
           {hotQuestions.map(({ _id, title }) => (
             <Link
               key={_id}
-              href={ROUTES.PROFILE(_id)}
+              href={routes.PROFILE(_id)}
               className="flex cursor-pointer items-center justify-between gap-7"
             >
               <p className="body-medium text-dark500_light700">{title}</p>

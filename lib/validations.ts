@@ -78,6 +78,10 @@ export const AskQuestionSchema = z.object({
     .max(5, { message: "You can add up to 5 tags." }),
 });
 
+export const EditQuestionSchema = AskQuestionSchema.extend({
+  questionId: z.string().min(1, { message: "Question ID is required." }),
+});
+
 export const UserSchema = z.object({
   name: z
     .string()
@@ -154,4 +158,8 @@ export const SignInWithOAuthSchema = z.object({
       .url({ message: "Please provide a valid image URL." })
       .optional(),
   }),
+});
+
+export const GetQuestionSchema = z.object({
+  questionId: z.string().min(1, { message: "Question ID is required." }),
 });

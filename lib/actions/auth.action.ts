@@ -5,7 +5,7 @@ import User from "@/database/user.model";
 import { ActionResponse, ErrorResponse } from "@/types/global";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
-import { action } from "../handlers/action";
+import action from "../handlers/action";
 import handleError from "../handlers/error";
 import { SignInSchema, SignUpSchema } from "../validations";
 import { signIn } from "@/auth";

@@ -1,4 +1,4 @@
-import ROUTES from "@/constants/routes";
+import routes from "@/constants/routes";
 import Link from "next/link";
 import React from "react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
@@ -19,7 +19,7 @@ const UserAvatar = ({ id, name, imageUrl, className = "h-9 w-9" }: Props) => {
     .toUpperCase()
     .slice(0, 2);
   return (
-    <Link href={ROUTES.PROFILE(id)}>
+    <Link href={routes.PROFILE(id)}>
       <Avatar className={className}>
         {imageUrl ? (
           <Image

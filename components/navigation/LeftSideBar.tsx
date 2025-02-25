@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 
 import { auth, signOut } from "@/auth";
-import ROUTES from "@/constants/routes";
+import routes from "@/constants/routes";
 
 import NavLinks from "./navbar/NavLinks";
 import { Button } from "../ui/button";
@@ -28,10 +28,7 @@ const LeftSidebar = async () => {
               await signOut();
             }}
           >
-            <Button
-              type="submit"
-              className="base-medium w-fit !bg-transparent px-4 py-3"
-            >
+            <Button className="small-medium light-border-2 btn-tertiary text-dark400_light900 min-h-[41px] w-full rounded-lg border px-4 py-3 shadow-none">
               <LogOut className="size-5 text-black dark:text-white" />
               <span className="text-dark300_light900 max-lg:hidden">
                 Logout
@@ -44,7 +41,7 @@ const LeftSidebar = async () => {
               className="small-medium btn-secondary min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none"
               asChild
             >
-              <Link href={ROUTES.SIGN_IN}>
+              <Link href={routes.SIGN_IN}>
                 <Image
                   src="/icons/account.svg"
                   alt="Account"
@@ -62,7 +59,7 @@ const LeftSidebar = async () => {
               className="small-medium light-border-2 btn-tertiary text-dark400_light900 min-h-[41px] w-full rounded-lg border px-4 py-3 shadow-none"
               asChild
             >
-              <Link href={ROUTES.SIGN_UP}>
+              <Link href={routes.SIGN_UP}>
                 <Image
                   src="/icons/sign-up.svg"
                   alt="Account"

@@ -3,8 +3,9 @@ import React from "react";
 
 import TagCard from "@/components/cards/TagCard";
 import Metric from "@/components/ui/Metric";
-import ROUTES from "@/constants/routes";
+import routes from "@/constants/routes";
 import { getElapsedTime } from "@/lib/utils";
+import { Question } from "@/types/global";
 
 interface QuestionCardProps {
   question: Question;
@@ -18,7 +19,7 @@ const QuestionCard = ({ question }: QuestionCardProps) => {
           <span className="subtle-regular text-dark400_light700 flex1 line-clamp-1 sm:hidden">
             {getElapsedTime(question.createdAt)}
           </span>
-          <Link href={ROUTES.QUESTION(question._id)}>
+          <Link href={routes.QUESTIONS(question._id)}>
             <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
               {question.title}
             </h3>
@@ -36,7 +37,7 @@ const QuestionCard = ({ question }: QuestionCardProps) => {
           alt={question.author.name}
           value={question.author.name}
           title={`- asked ${getElapsedTime(question.createdAt)}`}
-          href={ROUTES.PROFILE(question.author._id)}
+          href={routes.PROFILE(question.author._id)}
           textStyles="body-medium text-dark400_light700"
           isAuthor
         />

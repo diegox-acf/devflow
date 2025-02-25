@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import ROUTES from "@/constants/routes";
+import routes from "@/constants/routes";
 import { toPascalCase } from "@/lib/utils";
 import Link from "next/link";
 import { ActionResponse } from "@/types/global";
@@ -56,7 +56,7 @@ const AuthForm = <T extends FieldValues>({
             ? "Signed in successfully"
             : "Signed up successfully",
       });
-      router.push(ROUTES.HOME);
+      router.push(routes.HOME);
     } else {
       toast({
         title: `Error ${result.status}`,
@@ -120,7 +120,7 @@ const AuthForm = <T extends FieldValues>({
             Don't have an account?{" "}
             <Link
               className="paragraph-semibold primary-text-gradient"
-              href={ROUTES.SIGN_UP}
+              href={routes.SIGN_UP}
             >
               Sign up
             </Link>
@@ -130,7 +130,7 @@ const AuthForm = <T extends FieldValues>({
             Already have an account?{" "}
             <Link
               className="paragraph-semibold primary-text-gradient"
-              href={ROUTES.SIGN_IN}
+              href={routes.SIGN_IN}
             >
               Sign in
             </Link>
