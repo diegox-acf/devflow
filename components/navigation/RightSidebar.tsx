@@ -11,16 +11,7 @@ const hotQuestions = [
   { _id: "5", title: "How to create a custom hook in React?" },
 ];
 
-const popularTags = [
-  { _id: "1", name: "react", questions: 100 },
-  { _id: "2", name: "javascript", questions: 200 },
-  { _id: "3", name: "java", questions: 50 },
-  { _id: "4", name: "typescript", questions: 63 },
-  { _id: "5", name: "nextjs", questions: 412 },
-  { _id: "6", name: "tailwindcss", questions: 4 },
-  { _id: "7", name: "kumbiaphp", questions: 1 },
-  { _id: "8", name: "bun", questions: 1000 },
-];
+const popularTags = [{ _id: "1", name: "react", questions: 100 }];
 
 const RightSidebar = () => {
   type Greeting = "Hello" | "Hi" | "Welcome";
@@ -59,7 +50,7 @@ const RightSidebar = () => {
           {popularTags.map(({ _id, name, questions }) => (
             <TagCard
               key={_id}
-              id={_id}
+              _id={_id}
               name={name}
               questions={questions}
               showCount

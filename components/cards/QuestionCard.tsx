@@ -5,7 +5,6 @@ import TagCard from "@/components/cards/TagCard";
 import Metric from "@/components/ui/Metric";
 import routes from "@/constants/routes";
 import { getElapsedTime } from "@/lib/utils";
-import { Question } from "@/types/global";
 
 interface QuestionCardProps {
   question: Question;
@@ -28,7 +27,12 @@ const QuestionCard = ({ question }: QuestionCardProps) => {
       </div>
       <div className="mt-3.5 flex w-full flex-wrap gap-2">
         {question.tags.map((tag) => (
-          <TagCard key={tag._id} id={tag._id} name={tag.name} compact></TagCard>
+          <TagCard
+            key={tag._id}
+            _id={tag._id}
+            name={tag.name}
+            compact
+          ></TagCard>
         ))}
       </div>
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
