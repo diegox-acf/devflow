@@ -220,7 +220,7 @@ const QuestionForm = ({ question, isEdit = false }: Props) => {
                       {field.value.map((tag) => (
                         <TagCard
                           key={tag}
-                          id={tag}
+                          _id={tag}
                           name={tag}
                           compact
                           remove
