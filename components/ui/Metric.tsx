@@ -14,7 +14,7 @@ interface MetricProps {
   titleStyles?: string;
 }
 const Metric = ({
-  imgUrl,
+  imgUrl = "icons/account.svg",
   alt,
   value,
   title,

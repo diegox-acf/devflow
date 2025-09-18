@@ -23,7 +23,6 @@ import { Input } from "@/components/ui/input";
 import routes from "@/constants/routes";
 import { toPascalCase } from "@/lib/utils";
 import Link from "next/link";
-import { ActionResponse } from "@/types/global";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 

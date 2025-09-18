@@ -1,18 +1,22 @@
-import { auth } from "@/auth";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
+import AnswerForm from "@/components/forms/AnswerForm";
 import Metric from "@/components/ui/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import routes from "@/constants/routes";
-import { getQuestion } from "@/lib/actions/question.action";
+import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getElapsedTime } from "@/lib/utils";
-import { RouteParams } from "@/types/global";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import React from "react";
+import { after } from "next/server";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
+
+  after(async () => {
+    await incrementViews({ questionId: id });
+  });
+
   const { success, data: question } = await getQuestion({ questionId: id });
 
   if (!success || !question) {
@@ -80,6 +84,9 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           />
         ))}
       </div>
+      <section className="my-5">
+        <AnswerForm />
+      </section>
     </>
   );
 };

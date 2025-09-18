@@ -51,7 +51,7 @@ const Editor = ({ value, fieldChange, editorRef, ...props }: EditorProps) => {
       ref={editorRef}
       markdown={value}
       className="background-light800_dark200 light-border-2 
-      markdown-editor dark-editor w-full border grid"
+      markdown-editor dark-editor w-full border grid rounded-md"
       onChange={fieldChange}
       plugins={[
         // Example Plugin Usage
