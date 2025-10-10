@@ -2,22 +2,30 @@
 
 import { AnswerSchema } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Form, FormControl, FormField, FormItem } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
 import dynamic from "next/dynamic";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import { Button } from "../ui/button";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import { createAnswer } from "@/lib/actions/answer.action";
+import { toast } from "@/hooks/use-toast";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
-const AnswerForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const AnswerForm = ({ questionId }: { questionId: string }) => {
+  const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
 
   const editorRef = useRef<MDXEditorMethods>(null);
@@ -30,8 +38,29 @@ const AnswerForm = () => {
   });
 
   const handleSubmit = async (data: z.infer<typeof AnswerSchema>) => {
-    console.log(data);
+    startAnsweringTransition(async () => {
+      const result = await createAnswer({
+        questionId,
+        content: data.content,
+      });
+
+      if (result.success) {
+        form.reset();
+
+        toast({
+          title: "Success",
+          description: "Your answer has been posted successfully",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: result.error?.message,
+          variant: "destructive",
+        });
+      }
+    });
   };
+
   return (
     <div>
       <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
@@ -70,19 +99,20 @@ const AnswerForm = () => {
             name="content"
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3">
-                <FormControl className="mt-3.5">
+                <FormControl>
                   <Editor
                     value={field.value}
                     editorRef={editorRef}
                     fieldChange={field.onChange}
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
           <div className="flex justify-end">
             <Button type="submit" className="primary-gradient w-fit">
-              {isSubmitting ? (
+              {isAnswering ? (
                 <>
                   <ReloadIcon className="mr-2 size-4 animate-spin" /> Posting...
                 </>

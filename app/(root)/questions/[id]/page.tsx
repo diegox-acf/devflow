@@ -24,6 +24,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
   }
 
   const { author, createdAt, answers, views, tags, title, content } = question;
+
   return (
     <>
       <div className="flex-start w-full flex-col">
@@ -85,7 +86,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         ))}
       </div>
       <section className="my-5">
-        <AnswerForm />
+        <AnswerForm questionId={question._id} />
       </section>
     </>
   );
