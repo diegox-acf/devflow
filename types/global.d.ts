@@ -22,6 +22,13 @@ interface Question {
   createdAt: Date;
 }
 
+interface Answer {
+  _id: string;
+  author: Author;
+  content: string;
+  createdAt: Date;
+}
+
 type ActionResponse<T = null> = {
   success: boolean;
   data?: T;

@@ -4,13 +4,14 @@ import AnswerForm from "@/components/forms/AnswerForm";
 import Metric from "@/components/ui/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import routes from "@/constants/routes";
+import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getElapsedTime } from "@/lib/utils";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-const QuestionDetails = async ({ params }: RouteParams) => {
+const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
 
   after(async () => {
@@ -22,6 +23,17 @@ const QuestionDetails = async ({ params }: RouteParams) => {
   if (!success || !question) {
     return redirect("/404");
   }
+
+  const {
+    success: areAnswersLoaded,
+    data: answersData,
+    error: answersError,
+  } = await getAnswers({
+    page: 1,
+    pageSize: 10,
+    filter: "latest",
+    questionId: id,
+  });
 
   const { author, createdAt, answers, views, tags, title, content } = question;
 
@@ -84,6 +96,9 @@ const QuestionDetails = async ({ params }: RouteParams) => {
             compact
           />
         ))}
+      </div>
+      <div>
+        {/* {answers.data?.answers.map((answer) => <p>{answer.content}</p>)} */}
       </div>
       <section className="my-5">
         <AnswerForm questionId={question._id} />
