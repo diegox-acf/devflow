@@ -114,7 +114,7 @@ const DataRenderer = <T,>({
     );
   }
 
-  return <div>{render(data)}</div>;
+  return <>{render(data)}</>;
 };
 
 export default DataRenderer;

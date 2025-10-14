@@ -1,3 +1,4 @@
+import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
@@ -97,9 +98,14 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
           />
         ))}
       </div>
-      <div>
-        {/* {answers.data?.answers.map((answer) => <p>{answer.content}</p>)} */}
-      </div>
+      <section className="my-5">
+        <AllAnswers
+          data={answersData?.answers}
+          success={areAnswersLoaded}
+          error={answersError}
+          totalAnswers={answersData?.totalAnswers || 0}
+        />
+      </section>
       <section className="my-5">
         <AnswerForm questionId={question._id} />
       </section>
