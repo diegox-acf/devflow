@@ -9,6 +9,8 @@ import {
   UpdateVoteCountSchema,
 } from "../validations";
 import mongoose, { ClientSession } from "mongoose";
+import { revalidatePath } from "next/cache";
+import routes from "@/constants/routes";
 
 export async function updateVoteCount(
   params: UpdateVoteCountParams,
@@ -88,12 +90,29 @@ export async function createVote(
           { voteType },
           { new: true, session }
         );
-        await updateVoteCount({ targetId, targetType, voteType, change: 1 });
+        await updateVoteCount(
+          { targetId, targetType, voteType: existingVote.voteType, change: -1 },
+          session
+        );
+        await updateVoteCount(
+          { targetId, targetType, voteType, change: 1 },
+          session
+        );
       }
     } else {
-      await Vote.create([{ targetId, targetType, voteType, change: 1 }], {
-        session,
-      });
+      await Vote.create(
+        [
+          {
+            author: userId,
+            actionId: targetId,
+            actionType: targetType,
+            voteType,
+          },
+        ],
+        {
+          session,
+        }
+      );
       await updateVoteCount(
         { targetId, targetType, voteType, change: 1 },
         session
@@ -101,6 +120,9 @@ export async function createVote(
     }
     await session.commitTransaction();
     session.endSession();
+
+    revalidatePath(routes.QUESTIONS(targetId));
+
     return { success: true };
   } catch (error) {
     await session.abortTransaction();
