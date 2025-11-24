@@ -60,3 +60,15 @@ interface PaginatedSearchParams {
   filter?: string;
   sort?: string;
 }
+
+interface User {
+  _id: string;
+  name: string;
+  username: string;
+  emai: string;
+  bio?: string;
+  image?: string;
+  location?: string;
+  portfolio?: string;
+  reputation?: number;
+}
