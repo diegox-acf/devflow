@@ -2,11 +2,13 @@ import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
+import SaveQuestion from "@/components/questions/SaveQuestion";
 import Metric from "@/components/ui/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/votes/Votes";
 import routes from "@/constants/routes";
 import { getAnswers } from "@/lib/actions/answer.action";
+import { hasSavedQuestion } from "@/lib/actions/collection.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getElapsedTime } from "@/lib/utils";
@@ -44,6 +46,10 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
     targetType: "question",
   });
 
+  const hasSavedQuestionPromise = hasSavedQuestion({
+    questionId: question._id,
+  });
+
   const { author, createdAt, answers, views, tags, title, content } = question;
 
   return (
@@ -64,7 +70,7 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
               </p>
             </Link>
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end items-center gap-4">
             <Suspense fallback={<div>Loading...</div>}>
               <Votes
                 upvotes={question.upvotes}
@@ -72,6 +78,12 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
                 targetType="question"
                 targetId={question._id}
                 hasVotedPromise={hasVotedPromise}
+              />
+            </Suspense>
+            <Suspense fallback={<div>Loading...</div>}>
+              <SaveQuestion
+                questionId={question._id}
+                hasSavedQuestionPromise={hasSavedQuestionPromise}
               />
             </Suspense>
           </div>
