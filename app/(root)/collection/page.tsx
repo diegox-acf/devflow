@@ -10,6 +10,8 @@ import { getQuestions } from "@/lib/actions/question.action";
 import DataRenderer from "@/components/DataRenderer";
 import { EMPTY_QUESTION } from "@/constants/states";
 import { getSavedQuestions } from "@/lib/actions/collection.action";
+import CommonFilter from "@/components/filters/CommonFilter";
+import { CollectionFilters } from "@/constants/filters";
 
 interface Searchparams {
   searchParams: Promise<{ [key: string]: string }>;
@@ -35,6 +37,10 @@ const Collections = async ({ searchParams }: Searchparams) => {
           imgSrc="/icons/search.svg"
           placeholder="Search questions..."
           otherClasses="flex-1"
+        />
+        <CommonFilter
+          filters={CollectionFilters}
+          otherClasses="min-h-[56px] sm:min-w-[170px]"
         />
       </div>
       <DataRenderer
