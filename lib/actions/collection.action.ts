@@ -1,9 +1,11 @@
 "use server";
 
-import routes from "@/constants/routes";
-import { Collection, Question } from "@/database";
-import { PipelineStage, Types } from "mongoose";
+import mongoose, { PipelineStage } from "mongoose";
 import { revalidatePath } from "next/cache";
+
+import { Collection, Question } from "@/database";
+
+import routes from "@/constants/routes";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
 import {
@@ -26,11 +28,11 @@ export async function toggleSaveQuestion(
 
   const { questionId } = validationResult.params!;
   const userId = validationResult.session?.user?.id;
+
   try {
     const question = await Question.findById(questionId);
-    if (!question) {
-      throw new Error("Question not found");
-    }
+    if (!question) throw new Error("Question not found");
+
     const collection = await Collection.findOne({
       question: questionId,
       author: userId,
@@ -38,8 +40,15 @@ export async function toggleSaveQuestion(
 
     if (collection) {
       await Collection.findByIdAndDelete(collection._id);
+
       revalidatePath(routes.QUESTIONS(questionId));
-      return { success: true, data: { saved: false } };
+
+      return {
+        success: true,
+        data: {
+          saved: false,
+        },
+      };
     }
 
     await Collection.create({
@@ -48,7 +57,13 @@ export async function toggleSaveQuestion(
     });
 
     revalidatePath(routes.QUESTIONS(questionId));
-    return { success: true, data: { saved: true } };
+
+    return {
+      success: true,
+      data: {
+        saved: true,
+      },
+    };
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
@@ -76,7 +91,12 @@ export async function hasSavedQuestion(
       author: userId,
     });
 
-    return { success: true, data: { saved: !!collection } };
+    return {
+      success: true,
+      data: {
+        saved: !!collection,
+      },
+    };
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
@@ -90,9 +110,11 @@ export async function getSavedQuestions(
     schema: PaginatedSearchParamsSchema,
     authorize: true,
   });
+
   if (validationResult instanceof Error) {
     return handleError(validationResult) as ErrorResponse;
   }
+
   const userId = validationResult.session?.user?.id;
   const { page = 1, pageSize = 10, query, filter } = params;
 
@@ -100,11 +122,11 @@ export async function getSavedQuestions(
   const limit = pageSize;
 
   const sortOptions: Record<string, Record<string, 1 | -1>> = {
-    newest: { "question.createdAt": -1 },
+    mostrecent: { "question.createdAt": -1 },
     oldest: { "question.createdAt": 1 },
-    mostVoted: { "question.upvotes": -1 },
-    mostViewed: { "question.views": -1 },
-    mostAnswered: { "question.answers": -1 },
+    mostvoted: { "question.upvotes": -1 },
+    mostviewed: { "question.views": -1 },
+    mostanswered: { "question.answers": -1 },
   };
 
   const sortCriteria = sortOptions[filter as keyof typeof sortOptions] || {
@@ -113,11 +135,11 @@ export async function getSavedQuestions(
 
   try {
     const pipeline: PipelineStage[] = [
-      { $match: { author: new Types.ObjectId(userId) } },
+      { $match: { author: new mongoose.Types.ObjectId(userId) } },
       {
         $lookup: {
           from: "questions",
-          localField: "questions",
+          localField: "question",
           foreignField: "_id",
           as: "question",
         },
@@ -141,6 +163,7 @@ export async function getSavedQuestions(
         },
       },
     ];
+
     if (query) {
       pipeline.push({
         $match: {
@@ -161,7 +184,9 @@ export async function getSavedQuestions(
     pipeline.push({ $project: { question: 1, author: 1 } });
 
     const questions = await Collection.aggregate(pipeline);
+
     const isNext = totalCount.count > skip + questions.length;
+
     return {
       success: true,
       data: {
