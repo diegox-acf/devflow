@@ -3,7 +3,7 @@ import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
 import SaveQuestion from "@/components/questions/SaveQuestion";
-import Metric from "@/components/ui/Metric";
+import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/votes/Votes";
 import routes from "@/constants/routes";
@@ -130,6 +130,8 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
       </div>
       <section className="my-5">
         <AllAnswers
+          page={Number(page) || 1}
+          isNext={answersData?.isNext || false}
           data={answersData?.answers}
           success={areAnswersLoaded}
           error={answersError}

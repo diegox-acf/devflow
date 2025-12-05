@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 
 import TagCard from "@/components/cards/TagCard";
-import Metric from "@/components/ui/Metric";
+import Metric from "@/components/Metric";
 import routes from "@/constants/routes";
 import { getElapsedTime } from "@/lib/utils";
 
