@@ -7,15 +7,11 @@ import { getHotQuestions } from "@/lib/actions/question.action";
 import DataRenderer from "../DataRenderer";
 import { getTopTags } from "@/lib/actions/tag.action";
 
-const popularTags = [{ _id: "1", name: "react", questions: 100 }];
-
 const RightSidebar = async () => {
-  const { success, data: hotQuestions, error } = await getHotQuestions();
-  const {
-    success: topTagSuccess,
-    data: topTags,
-    error: topTagsError,
-  } = await getTopTags();
+  const [
+    { success, data: hotQuestions, error },
+    { success: topTagSuccess, data: topTags, error: topTagsError },
+  ] = await Promise.all([getHotQuestions(), getTopTags()]);
 
   return (
     <section
