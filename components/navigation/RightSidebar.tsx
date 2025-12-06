@@ -3,20 +3,19 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import TagCard from "../cards/TagCard";
-const hotQuestions = [
-  { _id: "1", title: "How to create a custom hook in React?" },
-  { _id: "2", title: "How to create a custom hook in React?" },
-  { _id: "3", title: "How to create a custom hook in React?" },
-  { _id: "4", title: "How to create a custom hook in React?" },
-  { _id: "5", title: "How to create a custom hook in React?" },
-];
+import { getHotQuestions } from "@/lib/actions/question.action";
+import DataRenderer from "../DataRenderer";
+import { getTopTags } from "@/lib/actions/tag.action";
 
 const popularTags = [{ _id: "1", name: "react", questions: 100 }];
 
-const RightSidebar = () => {
-  type Greeting = "Hello" | "Hi" | "Welcome";
-
-  let greeting: Greeting = "Welcome";
+const RightSidebar = async () => {
+  const { success, data: hotQuestions, error } = await getHotQuestions();
+  const {
+    success: topTagSuccess,
+    data: topTags,
+    error: topTagsError,
+  } = await getTopTags();
 
   return (
     <section
@@ -25,38 +24,74 @@ const RightSidebar = () => {
     >
       <div>
         <h3 className="h3-bold text_dark200_light900">Top Questions</h3>
-        <div className="mt-7 flex w-full flex-col gap-[30px]">
-          {hotQuestions.map(({ _id, title }) => (
-            <Link
-              key={_id}
-              href={routes.PROFILE(_id)}
-              className="flex cursor-pointer items-center justify-between gap-7"
-            >
-              <p className="body-medium text-dark500_light700">{title}</p>
-              <Image
-                src="/icons/chevron-right.svg"
-                width={20}
-                height={20}
-                alt="chevron"
-                className="invert-colors"
-              />
-            </Link>
-          ))}
-        </div>
+        <DataRenderer
+          data={hotQuestions}
+          empty={{
+            title: "No questions found",
+            message: "No questions have  been asked yet",
+          }}
+          success={success}
+          error={error}
+          render={(hotQuestions) => (
+            <div className="mt-7 flex w-full flex-col gap-[30px]">
+              {hotQuestions.map((question) => (
+                <Link
+                  key={question._id}
+                  href={routes.QUESTIONS(question._id)}
+                  className="flex cursor-pointer justify-between items-center gap-3"
+                >
+                  <div className="flex gap-2">
+                    <Image
+                      src={"/icons/question.svg"}
+                      width={20}
+                      height={20}
+                      alt="top-question"
+                      className="invert-colors"
+                    />
+                    <p className="body-medium text-dark500_light700">
+                      {question.title}
+                    </p>
+                  </div>
+                  <Image
+                    src="/icons/chevron-right.svg"
+                    width={20}
+                    height={20}
+                    alt="chevron"
+                    className="invert-colors"
+                  />
+                </Link>
+              ))}
+            </div>
+          )}
+        />
       </div>
+
       <div className="mt-16">
         <h3 className="h3-bold text-dark200_light900">Popular Tags</h3>
         <div className="mt-7 flex flex-col gap-4">
-          {popularTags.map(({ _id, name, questions }) => (
-            <TagCard
-              key={_id}
-              _id={_id}
-              name={name}
-              questions={questions}
-              showCount
-              compact
-            />
-          ))}
+          <DataRenderer
+            data={topTags}
+            empty={{
+              title: "No tags found",
+              message: "No tags have  been asked yet",
+            }}
+            success={topTagSuccess}
+            error={topTagsError}
+            render={(topTags) => (
+              <div className="mt-7 flex w-full flex-col gap-[30px]">
+                {topTags.map((topTag) => (
+                  <TagCard
+                    key={topTag._id}
+                    _id={topTag._id}
+                    name={topTag.name}
+                    questions={topTag.questions}
+                    showCount
+                    compact
+                  />
+                ))}
+              </div>
+            )}
+          />
         </div>
       </div>
     </section>
